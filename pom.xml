@@ -1,0 +1,120 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.automation</groupId>
+	<artifactId>KarateLearningProject</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>KarateLearningProject</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+		<maven.compiler.version>3.8.1</maven.compiler.version>
+		<maven.surefire.version>2.22.2</maven.surefire.version>
+		<karate.version>0.9.6</karate.version>
+		<cucumber-reports.version>5.6.1</cucumber-reports.version>
+	</properties>
+
+	<dependencies>
+		<!-- https://mvnrepository.com/artifact/com.intuit.karate/karate-apache -->
+		<dependency>
+			<groupId>com.intuit.karate</groupId>
+			<artifactId>karate-apache</artifactId>
+			<version>${karate.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.intuit.karate/karate-junit5 -->
+		<dependency>
+			<groupId>com.intuit.karate</groupId>
+			<artifactId>karate-junit5</artifactId>
+			<version>${karate.version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/net.masterthought/cucumber-reporting -->
+		<dependency>
+			<groupId>net.masterthought</groupId>
+			<artifactId>cucumber-reporting</artifactId>
+			<version>${cucumber-reports.version}</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<testResources>
+			<testResource>
+				<directory>src/test/java</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</testResource>
+		</testResources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven.compiler.version}</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<compilerArgument>-Werror</compilerArgument>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven.surefire.version}</version>
+				<!-- <configuration> <argLine>-Dfile.encoding=UTF-8</argLine> <includes> 
+					<include>**/TestRunnerParallelRunnerWithTags.java</include> </includes> </configuration> -->
+				<!-- <configuration> <argLine>-Dfile.encoding=UTF-8</argLine> <includes> 
+					<include>**/TestRunnerParallelRunnerWithTagsDynamic.java</include> </includes> 
+					<systemProperties> <location>apps/feature/JavaFeatures,apps/feature/JSfeatures</location> 
+					<tags>System,Smoke</tags> </systemProperties> <rerunFailingTestsCount>2</rerunFailingTestsCount> 
+					</configuration> -->
+				<configuration>
+					<argLine>-Dfile.encoding=UTF-8</argLine>
+					<includes>
+						<include>**/TestRunnerConfigFeature.java</include>
+					</includes>
+					<systemProperties>
+						<!-- <karate.env>qa</karate.env> -->
+						<karate.env>${karate.profile}</karate.env>
+					</systemProperties>
+					<rerunFailingTestsCount>2</rerunFailingTestsCount>
+				</configuration>
+
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>qa</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<karate.profile>qa</karate.profile>
+			</properties>
+		</profile>
+		<profile>
+			<id>staging</id>
+			<properties>
+				<karate.profile>staging</karate.profile>
+			</properties>
+		</profile>
+		<profile>
+			<id>uat</id>
+			<properties>
+				<karate.profile>uat</karate.profile>
+			</properties>
+		</profile>
+	</profiles>
+
+</project>

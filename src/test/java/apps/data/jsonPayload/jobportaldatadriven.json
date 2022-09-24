@@ -1,0 +1,20 @@
+{
+	"jobId":"#(jobid)",
+	"jobTitle": "#(jobtitle)",
+	"project": [
+		{
+			"technology": [
+				"SQL Lite",
+				"Gradle",
+				"Oracle"
+			],
+			"projectName": "Movie App"
+		}
+	],
+	"jobDescription": "#(jobdescription)",
+	"experience": [
+		"Google",
+		"Apple",
+		"Mobile Iron"
+	]
+}
