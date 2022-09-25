@@ -1,3 +1,4 @@
 This file is Added in Develop branch
 2nd developer made changes and pushed code back to develop branch
 1st developer has made some more changes and now feature is ready to be merged with master branch
+2nd developer is making some fix and pushing code back which dev1 is not aware. Dev1 will also make change and will try to push to dev branch
