@@ -5,7 +5,7 @@ Feature: Create job entry in the application
     * def testdata = read ('../../data/jsonPayload/data.csv')
     Given url 'https://jobportalkarate.herokuapp.com'
 	
-	@tag1
+	@tag1 @ignore
   Scenario Outline: Create Job entry in the application- Read jsonPayload - <jobid>
     Given path '/normal/webapi/add'
     * configure headers = {Content-Type: 'application/json', Accept: 'application/json'}
