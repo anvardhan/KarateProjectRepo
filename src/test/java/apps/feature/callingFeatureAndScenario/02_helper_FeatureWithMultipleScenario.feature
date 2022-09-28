@@ -1,3 +1,4 @@
+@ignore
 Feature: Feature to be called by other feature
 
   @getJobInfo

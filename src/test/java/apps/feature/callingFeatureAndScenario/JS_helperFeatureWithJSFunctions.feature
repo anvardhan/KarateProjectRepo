@@ -1,3 +1,4 @@
+@ignore
 Feature: Helper feature file - should only be called by any calling feature file
   Helper feature file should only contain one scenario with all required variables, functions and operations
 

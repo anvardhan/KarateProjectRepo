@@ -19,55 +19,65 @@ import java.util.Collection;
 import java.util.List;
 
 public class TestRunnerParallelRunnerWithTags {
-	
+
 	@Test
 	public void executeKarateTests() {
-		
+
 		//All feature file which is present inside feature package and its child package
 		//Results results = Runner.parallel(getClass(),5);
 		//Results results = Runner.path("classpath:apps/feature").parallel(5);
-		
+
 		//Note - If we specify tags using tags() method then all feature and scenarios (under the specified package or child package) 
 		//which are marked as specified tag will be executed.
-		
+
 		//This will run features and scenario which is tagged with Smoke/Regression/System
-		Results results = Runner.path("classpath:apps/feature").tags("@System").parallel(5); 
-				
+		Results results = Runner.path("classpath:apps/feature").tags("@System").outputCucumberJson(true).parallel(5); 
+
 		//Act as AND condition if we specify more than one tag as below. i.e tagged with both Smoke and Regression
 		//Results results = Runner.path("classpath:apps/feature").tags("@Regression", "@Smoke").parallel(5);
-		
-		System.out.println("Total Feature count: "+results.getFeatureCount());
-		System.out.println("Total Scenario count: "+results.getScenarioCount());
-		System.out.println("Total Pass count: "+results.getPassCount());
-		
-		//generateCucumberReport(results.getReportDir()); //getReportDir points to target/surefire-reports
-		
+
+		//Karate-version - 0.9.6
+		/*System.out.println("Total Feature count: "+results.getFeatureCount());		
+		System.out.println("Total Scenario count: "+results.getScenarioCount());		
+		System.out.println("Total Pass count: "+results.getPassCount());*/
+
+		//karate.version - only karate-junit (1.2.0) dependency is enough - remove karate-apache
+		System.out.println("Total Scenario count: "+results.getScenariosTotal());
+		System.out.println("Total Feature count: "+results.getFeaturesTotal());
+		System.out.println("Total Scenario Pass count: "+results.getScenariosPassed());
+
+		//works only with karate-apache - 0.9.6 and Junit5 1.2.0
+		generateCucumberReport(results.getReportDir()); //getReportDir points to target/karate-reports
+
 		assertEquals(0, results.getFailCount(), results.getErrorMessages());
-		
+
 	}
-	
+
 	//reportDirLocation -> \ProjectFolder\target\surefire-reports
 	private void generateCucumberReport(String reportDirLocation) {
-		
+
 		File reportDir = new File(reportDirLocation);
 		//List all json files	//FileUtils.listFiles(directory, extensions, recursive);
 		Collection<File> jsonCollectionFiles = FileUtils.listFiles(reportDir, new String[] {"json"}, true);
-		
+
 		//ArrayList to store json path of each json file
 		List<String> jsonFiles = new ArrayList<String>();
-		
+
 		//Get absolute path of each json file and add it in array list
 		jsonCollectionFiles.forEach(file -> jsonFiles.add(file.getAbsolutePath()));
-		
+
 		//Configuration object - setup configuration as needed
 		//Configuration configuration = new Configuration(reportDirectory, projectName)
-		Configuration configuration = new Configuration(reportDir, "Karate Demo Project");
+		//Configuration configuration = new Configuration(reportDir, "Karate Demo Project");
+		Configuration configuration = new Configuration(new File("target"), "Karate Demo Project");
+		configuration.addClassifications("TestedBy", "Anand");
+		configuration.addClassifications("Environment", "QA");
 		//ReportBuilder reportBuilder = new ReportBuilder(jsonFiles, configuration);
 		ReportBuilder reportBuilder = new ReportBuilder(jsonFiles, configuration);
 		Reportable result = reportBuilder.generateReports();
 		//result - We can decide what to do if report has failed
 	}
-	
+
 	//FileUtils.listFiles(directory, extensions, recursive);
 	//listFiles - Finds files within a given directory (and optionally its sub directories) which match an array of extensions.
 	//Parameters:directory the directory to search in extensions an array of extensions, ex. {"java","xml"}. 

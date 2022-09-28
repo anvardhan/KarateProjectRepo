@@ -1,3 +1,4 @@
+@ignore
 Feature: Create job entry in the application
   Use Post request to create job entries in the portal
   Calling this feature below scenario we need to pass 3 input - | jobid | jobtitle | jobdescription |

@@ -43,14 +43,21 @@ public class TestRunnerParallelRunnerWithTagsDynamic {
 
 		//Dynamically pass location and tags at Run time 
 		//- use overloaded method of path and tags which accepts List<String>		
-		Results results = Runner.path(getPath()).tags(getTags()).parallel(5);
+		Results results = Runner.path(getPath()).tags(getTags()).outputCucumberJson(true).parallel(5);
 
 
-		System.out.println("Total Feature count: "+results.getFeatureCount());
-		System.out.println("Total Scenario count: "+results.getScenarioCount());
-		System.out.println("Total Pass count: "+results.getPassCount());
+		//Karate-version - 0.9.6
+		/*System.out.println("Total Feature count: "+results.getFeatureCount());		
+		  System.out.println("Total Scenario count: "+results.getScenarioCount());		
+		  System.out.println("Total Pass count: "+results.getPassCount());*/
 
-		//generateCucumberReport(results.getReportDir()); //getReportDir points to target/surefire-reports
+		//karate.version - only karate-junit (1.2.0) dependency is enough - remove karate-apache
+		System.out.println("Total Scenario count: "+results.getScenariosTotal());
+		System.out.println("Total Feature count: "+results.getFeaturesTotal());
+		System.out.println("Total Scenario Pass count: "+results.getScenariosPassed());
+
+		//works only with karate-apache - 0.9.6 and Junit5 1.2.0
+		//generateCucumberReport(results.getReportDir()); //getReportDir points to target/karate-reports
 
 		assertEquals(0, results.getFailCount(), results.getErrorMessages());
 
@@ -71,7 +78,10 @@ public class TestRunnerParallelRunnerWithTagsDynamic {
 
 		//Configuration object - setup configuration as needed
 		//Configuration configuration = new Configuration(reportDirectory, projectName)
-		Configuration configuration = new Configuration(reportDir, "Karate Demo Project");
+		//Configuration configuration = new Configuration(reportDir, "Karate Demo Project");
+		Configuration configuration = new Configuration(new File("target"), "Karate Demo Project");
+		configuration.addClassifications("TestedBy", "Anand");
+		configuration.addClassifications("Environment", "QA");
 		//ReportBuilder reportBuilder = new ReportBuilder(jsonFiles, configuration);
 		ReportBuilder reportBuilder = new ReportBuilder(jsonFiles, configuration);
 		Reportable result = reportBuilder.generateReports();
@@ -106,7 +116,7 @@ public class TestRunnerParallelRunnerWithTagsDynamic {
 		String locationValue = System.getProperty("location", "apps/feature"); //@Regression is default if we do not set Argument then default values will be picked.
 		//List<String> locationList = Arrays.asList(CLASS_PATH + locationValue);
 		List<String> locationList = Collections.emptyList();		
-		
+
 		if(locationValue.contains(",")) {
 			String[] locationValueArray = locationValue.split(",");
 			locationList = Arrays.asList(locationValueArray);
@@ -125,7 +135,7 @@ public class TestRunnerParallelRunnerWithTagsDynamic {
 		//String tags = System.getProperty(key, def);
 		String tagValue = System.getProperty("tags", "@Regression"); //@Regression is default if we do not set Argument then default values will be picked.
 		List<String> tagList = Collections.emptyList();
-		
+
 		if(tagValue.contains(",")) {
 			String[] tagValueArray = tagValue.split(",");
 			tagList = Arrays.asList(tagValueArray);

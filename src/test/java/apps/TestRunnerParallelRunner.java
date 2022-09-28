@@ -21,24 +21,32 @@ import java.util.List;
 public class TestRunnerParallelRunner {
 	
 	@Test
-	public void executeKarateTests() {
+	public void executeKarateTests() throws InterruptedException {
 		
 		//Results results = Runner.parallel(getClass(),5);
 				
-		Results results = Runner.path("classpath:apps/feature").parallel(5);
+		Results results = Runner.path("classpath:apps/feature/callingFeatureAndScenario")
+							.outputCucumberJson(true)
+							.parallel(5);
 		
-		System.out.println("Total Feature count: "+results.getFeatureCount());
-		System.out.println("Total Scenario count: "+results.getScenarioCount());
-		System.out.println("Total Pass count: "+results.getPassCount());
+		//Karate-version - 0.9.6
+		/*System.out.println("Total Feature count: "+results.getFeatureCount());		
+		System.out.println("Total Scenario count: "+results.getScenarioCount());		
+		System.out.println("Total Pass count: "+results.getPassCount());*/
 		
-		//generateCucumberReport(results.getReportDir()); //getReportDir points to target/surefire-reports
+		//karate.version - only karate-junit (1.2.0) dependency is enough - remove karate-apache
+		System.out.println("Total Scenario count: "+results.getScenariosTotal());
+		System.out.println("Total Feature count: "+results.getFeaturesTotal());
+		System.out.println("Total Scenario Pass count: "+results.getScenariosPassed());
+		
+		generateCucumberReport(results.getReportDir()); //getReportDir points to target/karate-reports
 		
 		assertEquals(0, results.getFailCount(), results.getErrorMessages());
 		
 	}
 	
-	//reportDirLocation -> \ProjectFolder\target\surefire-reports
-	private void generateCucumberReport(String reportDirLocation) {
+	//reportDirLocation -> \ProjectFolder\target\karate-reports
+	private void generateCucumberReport(String reportDirLocation) { //output directory
 		
 		File reportDir = new File(reportDirLocation);
 		//List all json files	//FileUtils.listFiles(directory, extensions, recursive);
@@ -52,7 +60,11 @@ public class TestRunnerParallelRunner {
 		
 		//Configuration object - setup configuration as needed
 		//Configuration configuration = new Configuration(reportDirectory, projectName)
-		Configuration configuration = new Configuration(reportDir, "Karate Demo Project");
+	//Configuration configuration = new Configuration(reportDir, "Karate Demo Project");
+		Configuration configuration = new Configuration(new File("target"), "Karate Demo Project");
+		// Additional metadata presented on main page
+		configuration.addClassifications("TestedBy", "Anand");
+		configuration.addClassifications("Environment", "QA");
 		//ReportBuilder reportBuilder = new ReportBuilder(jsonFiles, configuration);
 		ReportBuilder reportBuilder = new ReportBuilder(jsonFiles, configuration);
 		Reportable result = reportBuilder.generateReports();
