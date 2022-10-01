@@ -23,12 +23,8 @@
 
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/com.intuit.karate/karate-apache -->
-		<!-- <dependency>
-			<groupId>com.intuit.karate</groupId>
-			<artifactId>karate-apache</artifactId>
-			<version>${karate.version}</version>
-			<scope>test</scope>
-		</dependency> -->
+		<!-- <dependency> <groupId>com.intuit.karate</groupId> <artifactId>karate-apache</artifactId> 
+			<version>${karate.version}</version> <scope>test</scope> </dependency> -->
 
 		<!-- https://mvnrepository.com/artifact/com.intuit.karate/karate-junit5 -->
 		<dependency>
@@ -43,6 +39,12 @@
 			<groupId>net.masterthought</groupId>
 			<artifactId>cucumber-reporting</artifactId>
 			<version>${cucumber-reports.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.aventstack</groupId>
+			<artifactId>extentreports</artifactId>
+			<version>5.0.3</version>
 		</dependency>
 
 	</dependencies>
@@ -84,7 +86,7 @@
 				<configuration>
 					<argLine>-Dfile.encoding=UTF-8</argLine>
 					<includes>
-						<include>**/TestRunnerParallelRunner.java</include>
+						<include>**/ParalleRunnerWithExtentReport.java</include>
 					</includes>
 					<systemProperties>
 						<karate.env>qa</karate.env>

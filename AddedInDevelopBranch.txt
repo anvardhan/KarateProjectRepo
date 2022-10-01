@@ -1,6 +1,0 @@
-This file is Added in Develop branch
-2nd developer made changes and pushed code back to develop branch
-1st developer has made some more changes and now feature is ready to be merged with master branch
-1st developer is making additional changes but he is not aware of the changes made by dev2. Resolved conflict
-This content by our team and pushed to develop branch and ready for merge to master
-Added more line
